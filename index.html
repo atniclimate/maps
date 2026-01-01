@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IndigenousAccess Maps - Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: #8B4513;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        .maps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .map-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .map-card h3 {
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .map-preview {
+            height: 300px;
+            border: none;
+        }
+        .map-card p {
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .map-card .embed-code {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+        .map-card code {
+            display: block;
+            padding: 10px;
+            background: #212529;
+            color: #00ff00;
+            border-radius: 4px;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        .instructions {
+            margin-top: 50px;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .instructions h2 {
+            margin-top: 0;
+            color: #8B4513;
+        }
+        .instructions h3 {
+            margin-top: 25px;
+            color: #495057;
+        }
+        .instructions code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        .instructions pre {
+            background: #212529;
+            color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        .instructions pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IndigenousAccess Maps</h1>
+        <p class="subtitle">Embeddable GIS maps for IndigenousAccess.org</p>
+
+        <div class="maps-grid">
+            <!-- Weather Hazards Map -->
+            <div class="map-card">
+                <h3>Weather Hazards</h3>
+                <iframe class="map-preview" src="embed/hazards.html?region=wa"></iframe>
+                <p>Real-time NWS weather alerts, watches, and warnings with Tribal boundaries overlay.</p>
+                <div class="embed-code">
+                    <code>&lt;iframe src="https://[your-org].github.io/maps/embed/hazards.html?region=wa" width="100%" height="500"&gt;&lt;/iframe&gt;</code>
+                </div>
+            </div>
+
+            <!-- Flood Zones Map -->
+            <div class="map-card">
+                <h3>Flood Zones</h3>
+                <iframe class="map-preview" src="embed/flood-zones.html?region=wa"></iframe>
+                <p>FEMA National Flood Hazard Layer with Tribal territory context.</p>
+                <div class="embed-code">
+                    <code>&lt;iframe src="https://[your-org].github.io/maps/embed/flood-zones.html?region=wa" width="100%" height="500"&gt;&lt;/iframe&gt;</code>
+                </div>
+            </div>
+
+            <!-- River Monitoring Map -->
+            <div class="map-card">
+                <h3>River Monitoring</h3>
+                <iframe class="map-preview" src="embed/rivers.html?region=wa"></iframe>
+                <p>USGS river gages with real-time streamflow and gage height data.</p>
+                <div class="embed-code">
+                    <code>&lt;iframe src="https://[your-org].github.io/maps/embed/rivers.html?region=wa" width="100%" height="500"&gt;&lt;/iframe&gt;</code>
+                </div>
+            </div>
+
+            <!-- Tribal Lands Map -->
+            <div class="map-card">
+                <h3>Tribal Lands</h3>
+                <iframe class="map-preview" src="embed/tribal-lands.html?region=pnw"></iframe>
+                <p>Pacific Northwest Tribal boundaries with selection and information.</p>
+                <div class="embed-code">
+                    <code>&lt;iframe src="https://[your-org].github.io/maps/embed/tribal-lands.html?region=pnw" width="100%" height="500"&gt;&lt;/iframe&gt;</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>Embedding in Squarespace</h2>
+
+            <h3>Basic Embed</h3>
+            <p>Add a <strong>Code Block</strong> to your Squarespace page and paste the iframe code:</p>
+            <pre><code>&lt;iframe
+  src="https://indigenousaccess.github.io/maps/embed/hazards.html"
+  width="100%"
+  height="500"
+  frameborder="0"
+  style="border: none; border-radius: 8px;"
+&gt;&lt;/iframe&gt;</code></pre>
+
+            <h3>URL Parameters</h3>
+            <p>Customize the map behavior with URL parameters:</p>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Values</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><code>region</code></td>
+                    <td>pnw, wa, or, id, mt</td>
+                    <td>Initial map region</td>
+                </tr>
+                <tr>
+                    <td><code>tribe</code></td>
+                    <td>Tribal code</td>
+                    <td>Focus on specific Tribal territory</td>
+                </tr>
+                <tr>
+                    <td><code>controls</code></td>
+                    <td>full, minimal, none</td>
+                    <td>Control bar visibility</td>
+                </tr>
+            </table>
+
+            <h3>Example: Washington State Focus</h3>
+            <pre><code>&lt;iframe src="embed/hazards.html?region=wa" ...&gt;&lt;/iframe&gt;</code></pre>
+
+            <h3>Example: Quinault Territory Focus</h3>
+            <pre><code>&lt;iframe src="embed/tribal-lands.html?tribe=quinault" ...&gt;&lt;/iframe&gt;</code></pre>
+        </div>
+    </div>
+</body>
+</html>

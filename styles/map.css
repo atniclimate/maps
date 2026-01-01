@@ -1,0 +1,547 @@
+/**
+ * IndigenousAccess Maps - Stylesheet
+ *
+ * Consistent styling for embedded maps across IndigenousAccess.org
+ */
+
+/* ============================================
+   Base Reset & Layout
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+}
+
+#ia-map {
+    position: absolute;
+    top: 50px;  /* Space for controls */
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Full-height mode (no controls) */
+body.no-controls #ia-map {
+    top: 0;
+}
+
+/* ============================================
+   Control Panel
+   ============================================ */
+
+#ia-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 20px;
+}
+
+.ia-control-panel {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Region Selector */
+.ia-region-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ia-region-selector label {
+    font-weight: 500;
+    color: #495057;
+    font-size: 13px;
+}
+
+.ia-region-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.ia-region-btn {
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: #495057;
+    transition: all 0.15s ease;
+}
+
+.ia-region-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.ia-region-btn.active {
+    background: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+/* Tribal Dropdown */
+.ia-tribal-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ia-tribal-dropdown label {
+    font-weight: 500;
+    color: #495057;
+    font-size: 13px;
+}
+
+.ia-select {
+    padding: 6px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 13px;
+    color: #333;
+    min-width: 200px;
+    max-width: 300px;
+    cursor: pointer;
+}
+
+.ia-select:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+/* Layer Toggles */
+.ia-layer-toggles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ia-layer-toggles > label {
+    font-weight: 500;
+    color: #495057;
+    font-size: 13px;
+}
+
+.ia-toggle-container {
+    display: flex;
+    gap: 12px;
+}
+
+.ia-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.ia-toggle-wrapper input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.ia-toggle-label {
+    font-size: 13px;
+    color: #495057;
+}
+
+/* ============================================
+   Legend
+   ============================================ */
+
+#ia-legend {
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
+    z-index: 1000;
+}
+
+.ia-legend-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 6px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    min-width: 150px;
+}
+
+.ia-legend-content h4 {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.ia-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.ia-legend-swatch {
+    width: 20px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ia-legend-swatch.ia-legend-circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+
+.ia-legend-label {
+    font-size: 12px;
+    color: #495057;
+}
+
+.ia-legend-note {
+    margin: 8px 0 0 0;
+    font-size: 11px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* ============================================
+   Loading Indicator
+   ============================================ */
+
+.ia-loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ============================================
+   Popup Styles
+   ============================================ */
+
+.ia-leaflet-popup .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    padding: 0;
+}
+
+.ia-leaflet-popup .leaflet-popup-content {
+    margin: 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.ia-popup {
+    padding: 16px;
+    font-size: 13px;
+}
+
+.ia-popup-title {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+}
+
+.ia-popup-subtitle {
+    margin: 0 0 12px 0;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.ia-popup-stat {
+    margin: 6px 0;
+    font-size: 13px;
+}
+
+.ia-popup-stat strong {
+    color: #495057;
+}
+
+.ia-popup-stat.ia-stat-primary {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.ia-popup-description {
+    margin: 12px 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #495057;
+}
+
+.ia-popup-link {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 12px;
+    background: #0d6efd;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.ia-popup-link:hover {
+    background: #0b5ed7;
+}
+
+.ia-popup-source {
+    margin: 12px 0 0 0;
+    padding-top: 8px;
+    border-top: 1px solid #e9ecef;
+    font-size: 11px;
+    color: #6c757d;
+}
+
+/* Popup Type-Specific Styles */
+
+/* Tribal */
+.ia-popup-tribal .ia-popup-title {
+    color: #8B4513;
+}
+
+/* Flood */
+.ia-popup-flood .ia-popup-risk {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.ia-popup-flood .ia-risk-high {
+    background: #dc3545;
+    color: #fff;
+}
+
+.ia-popup-flood .ia-risk-moderate {
+    background: #ffc107;
+    color: #212529;
+}
+
+.ia-popup-flood .ia-risk-low {
+    background: #28a745;
+    color: #fff;
+}
+
+.ia-popup-flood .ia-risk-unknown {
+    background: #6c757d;
+    color: #fff;
+}
+
+.ia-popup-warning {
+    margin: 10px 0;
+    padding: 8px 10px;
+    background: #fff3cd;
+    border-left: 3px solid #ffc107;
+    font-size: 12px;
+    color: #856404;
+}
+
+/* Weather Hazard */
+.ia-popup-hazard.ia-severity-extreme {
+    border-top: 4px solid #FF0000;
+}
+
+.ia-popup-hazard.ia-severity-severe {
+    border-top: 4px solid #FF6600;
+}
+
+.ia-popup-hazard.ia-severity-moderate {
+    border-top: 4px solid #FFCC00;
+}
+
+.ia-popup-hazard.ia-severity-minor {
+    border-top: 4px solid #99CC00;
+}
+
+.ia-popup-severity {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #e9ecef;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.ia-popup-headline {
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.ia-popup-expires {
+    font-size: 12px;
+    color: #dc3545;
+}
+
+.ia-popup-instruction {
+    margin: 10px 0;
+    padding: 8px 10px;
+    background: #d4edda;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* River Gage */
+.ia-popup-river .ia-stat-primary {
+    font-size: 18px;
+    color: #0d6efd;
+}
+
+.ia-popup-river .ia-flood-warning {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.ia-popup-timestamp {
+    font-size: 11px;
+    color: #6c757d;
+    margin: 8px 0;
+}
+
+/* ============================================
+   Custom Markers
+   ============================================ */
+
+.ia-hazard-marker {
+    background: transparent;
+}
+
+.ia-hazard-icon {
+    font-size: 24px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.ia-gage-marker {
+    background: transparent;
+}
+
+.ia-gage-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 2px solid #fff;
+}
+
+.ia-gage-symbol {
+    font-size: 14px;
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+
+@media (max-width: 768px) {
+    #ia-controls {
+        height: auto;
+        min-height: 50px;
+        padding: 8px 10px;
+        flex-wrap: wrap;
+    }
+
+    #ia-map {
+        top: 80px;
+    }
+
+    .ia-control-panel {
+        gap: 10px;
+    }
+
+    .ia-region-selector,
+    .ia-tribal-dropdown,
+    .ia-layer-toggles {
+        flex-wrap: wrap;
+    }
+
+    .ia-select {
+        min-width: 150px;
+        max-width: none;
+        width: 100%;
+    }
+
+    .ia-region-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    #ia-legend {
+        bottom: 20px;
+        left: 5px;
+        right: 5px;
+    }
+
+    .ia-legend-content {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .ia-region-selector label,
+    .ia-tribal-dropdown label,
+    .ia-layer-toggles > label {
+        display: none;
+    }
+
+    #ia-map {
+        top: 100px;
+    }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+@media print {
+    #ia-controls {
+        display: none;
+    }
+
+    #ia-map {
+        top: 0;
+        position: relative;
+        height: 600px;
+    }
+
+    .ia-legend-content {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}

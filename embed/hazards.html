@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Hazards - IndigenousAccess Maps</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="anonymous">
+
+    <!-- IndigenousAccess Map Styles -->
+    <link rel="stylesheet" href="../styles/map.css">
+</head>
+<body>
+    <div id="ia-controls"></div>
+    <div id="ia-map"></div>
+    <div id="ia-legend"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="anonymous"></script>
+
+    <!-- IndigenousAccess Map Libraries -->
+    <script src="../lib/map-core.js"></script>
+    <script src="../lib/popups.js"></script>
+    <script src="../lib/controls.js"></script>
+    <script src="../lib/tribal-boundaries.js"></script>
+    <script src="../lib/hazard-layers.js"></script>
+
+    <script>
+        (async function() {
+            'use strict';
+
+            // Initialize map
+            const map = IndigenousAccessMaps.init('ia-map', {
+                basemap: 'cartodb_light'
+            });
+
+            // Set up controls
+            const params = IndigenousAccessMaps.parseParams();
+
+            IAControls.createControlPanel('ia-controls', {
+                showRegions: true,
+                showTribalDropdown: true,
+                regions: ['pnw', 'wa', 'or', 'id', 'mt'],
+                layerToggles: [
+                    {
+                        id: 'tribal',
+                        name: 'Tribal Boundaries',
+                        default: true,
+                        onChange: async (enabled) => {
+                            if (enabled) {
+                                await IATribalBoundaries.addToMap({ visible: true });
+                            } else {
+                                IATribalBoundaries.removeFromMap();
+                            }
+                        }
+                    },
+                    {
+                        id: 'hazards',
+                        name: 'Weather Alerts',
+                        default: true,
+                        onChange: async (enabled) => {
+                            if (enabled) {
+                                await IAHazardLayers.addToMap({ visible: true });
+                                updateLegend();
+                            } else {
+                                IAHazardLayers.removeFromMap();
+                                clearLegend();
+                            }
+                        }
+                    }
+                ]
+            });
+
+            // Handle region changes
+            IAControls.onRegionChange((regionCode, regionData) => {
+                // Could reload alerts for specific region
+                console.log('Region changed to:', regionCode);
+            });
+
+            // Handle tribe selection
+            IAControls.onTribeChange(async (tribeCode, stateCode) => {
+                const found = IATribalBoundaries.focusTribe(tribeCode);
+                if (!found) {
+                    console.log('Tribe not found in loaded boundaries:', tribeCode);
+                }
+            });
+
+            // Load initial layers
+            try {
+                // Load Tribal boundaries
+                await IATribalBoundaries.addToMap({ visible: true });
+
+                // Load weather hazards
+                await IAHazardLayers.addToMap({
+                    visible: true,
+                    area: ['WA', 'OR', 'ID', 'MT'],
+                    autoRefresh: true,
+                    refreshInterval: 300000 // 5 minutes
+                });
+
+                updateLegend();
+            } catch (error) {
+                console.error('Failed to load layers:', error);
+            }
+
+            // Legend functions
+            function updateLegend() {
+                const legendDiv = document.getElementById('ia-legend');
+                const counts = IAHazardLayers.getAlertCounts();
+
+                if (counts.total === 0) {
+                    legendDiv.innerHTML = '<div class="ia-legend-content"><p>No active alerts</p></div>';
+                    return;
+                }
+
+                let html = '<div class="ia-legend-content"><h4>Active Alerts</h4>';
+                const legend = IAHazardLayers.getLegend();
+
+                legend.forEach(item => {
+                    const count = counts[item.severity] || 0;
+                    if (count > 0) {
+                        html += `
+                            <div class="ia-legend-item">
+                                <span class="ia-legend-swatch" style="background-color: ${item.color}"></span>
+                                <span class="ia-legend-label">${item.label}: ${count}</span>
+                            </div>
+                        `;
+                    }
+                });
+
+                html += '</div>';
+                legendDiv.innerHTML = html;
+            }
+
+            function clearLegend() {
+                document.getElementById('ia-legend').innerHTML = '';
+            }
+
+            // Expose for debugging
+            window.IAMap = {
+                map: map,
+                hazards: IAHazardLayers,
+                tribal: IATribalBoundaries,
+                controls: IAControls
+            };
+        })();
+    </script>
+</body>
+</html>

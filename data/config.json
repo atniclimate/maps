@@ -1,0 +1,115 @@
+{
+  "version": "1.0.0",
+  "name": "IndigenousAccess Maps",
+  "description": "External map server for IndigenousAccess.org",
+
+  "defaults": {
+    "center": [47.5, -120.5],
+    "zoom": 7,
+    "basemap": "cartodb_light",
+    "region": "pnw"
+  },
+
+  "regions": {
+    "pnw": {
+      "name": "Pacific Northwest",
+      "states": ["WA", "OR", "ID", "MT"],
+      "bounds": [[41.0, -130.0], [54.0, -110.0]]
+    },
+    "wa": {
+      "name": "Washington",
+      "states": ["WA"],
+      "bounds": [[45.5, -124.8], [49.0, -116.9]]
+    },
+    "or": {
+      "name": "Oregon",
+      "states": ["OR"],
+      "bounds": [[41.9, -124.6], [46.3, -116.5]]
+    },
+    "id": {
+      "name": "Idaho",
+      "states": ["ID"],
+      "bounds": [[41.9, -117.2], [49.0, -111.0]]
+    },
+    "mt": {
+      "name": "Montana",
+      "states": ["MT"],
+      "bounds": [[44.3, -116.1], [49.0, -104.0]]
+    }
+  },
+
+  "layers": {
+    "tribal_boundaries": {
+      "name": "Tribal Boundaries",
+      "source": "local",
+      "path": "./data/tribal-boundaries/pnw-tribal-boundaries.geojson",
+      "backup_source": "bia_lar",
+      "visible_default": true
+    },
+    "flood_zones": {
+      "name": "FEMA Flood Zones",
+      "source": "fema_nfhl",
+      "dynamic_load": true,
+      "visible_default": false
+    },
+    "weather_hazards": {
+      "name": "Weather Alerts",
+      "source": "nws_api",
+      "auto_refresh": true,
+      "refresh_interval_ms": 300000,
+      "visible_default": true
+    },
+    "river_gages": {
+      "name": "River Gages",
+      "source": "usgs_nwis",
+      "auto_refresh": true,
+      "refresh_interval_ms": 900000,
+      "visible_default": true
+    }
+  },
+
+  "data_sources": {
+    "bia_lar": {
+      "name": "BIA Land Area Representation",
+      "url": "https://biamaps.geoplatform.gov/server/rest/services/DivLTR/BIA_AIAN_National_LAR/MapServer",
+      "type": "arcgis_feature"
+    },
+    "census_aian": {
+      "name": "Census AIAN Boundaries",
+      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/AIANNHA/MapServer",
+      "type": "arcgis_feature"
+    },
+    "fema_nfhl": {
+      "name": "FEMA National Flood Hazard Layer",
+      "url": "https://hazards.fema.gov/gis/nfhl/rest/services/public/NFHL/MapServer",
+      "type": "arcgis_feature"
+    },
+    "nws_api": {
+      "name": "National Weather Service API",
+      "url": "https://api.weather.gov",
+      "type": "rest_api"
+    },
+    "usgs_nwis": {
+      "name": "USGS National Water Information System",
+      "url": "https://waterservices.usgs.gov/nwis",
+      "type": "rest_api"
+    }
+  },
+
+  "styling": {
+    "tribal_boundaries": {
+      "default": {
+        "color": "#8B4513",
+        "weight": 2,
+        "fillColor": "#DEB887",
+        "fillOpacity": 0.3
+      },
+      "highlighted": {
+        "color": "#4A2511",
+        "weight": 3,
+        "fillColor": "#CD853F",
+        "fillOpacity": 0.5
+      }
+    }
+  }
+}

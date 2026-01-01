@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tribal Lands - IndigenousAccess Maps</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="anonymous">
+
+    <!-- IndigenousAccess Map Styles -->
+    <link rel="stylesheet" href="../styles/map.css">
+</head>
+<body>
+    <div id="ia-controls"></div>
+    <div id="ia-map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="anonymous"></script>
+
+    <!-- IndigenousAccess Map Libraries -->
+    <script src="../lib/map-core.js"></script>
+    <script src="../lib/popups.js"></script>
+    <script src="../lib/controls.js"></script>
+    <script src="../lib/tribal-boundaries.js"></script>
+
+    <script>
+        (async function() {
+            'use strict';
+
+            // Initialize map
+            const map = IndigenousAccessMaps.init('ia-map', {
+                basemap: 'cartodb_light'
+            });
+
+            // Set up controls - focused on Tribal selection
+            IAControls.createControlPanel('ia-controls', {
+                showRegions: true,
+                showTribalDropdown: true,
+                regions: ['pnw', 'wa', 'or', 'id', 'mt']
+            });
+
+            // Handle tribe selection - zoom and highlight
+            IAControls.onTribeChange(async (tribeCode, stateCode) => {
+                const found = IATribalBoundaries.focusTribe(tribeCode);
+                if (!found) {
+                    console.log('Tribe not found:', tribeCode);
+                }
+            });
+
+            // Load Tribal boundaries as the primary layer
+            try {
+                await IATribalBoundaries.addToMap({ visible: true });
+
+                // Set up feature click handler
+                IATribalBoundaries.onFeatureClick((feature, layer, event) => {
+                    // Could trigger additional actions here
+                    console.log('Clicked:', feature.properties.name || feature.properties.NAME);
+                });
+            } catch (error) {
+                console.error('Failed to load Tribal boundaries:', error);
+            }
+
+            // Expose for debugging
+            window.IAMap = {
+                map: map,
+                tribal: IATribalBoundaries,
+                controls: IAControls
+            };
+        })();
+    </script>
+</body>
+</html>
